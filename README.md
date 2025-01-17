@@ -1,42 +1,77 @@
-# dict2mdx
-This is a python script to automatically convert Lingvo DSL, Babylon BGL, Stardict, ZIM, Slob, Tabfile txt, etc dictionaries to MDict MDX (see input formats supported by [Pyglossary](https://github.com/ilius/pyglossary)).  
+# Create venv first
+```bash 
+python3 -m venv .venv
+source .venv/bin/activate
+```
 
-N.B: this script can also pack the resources folder which is located beside the dictionary file to MDD automatically.
+# install the modified version of pyglossary
+https://drive.google.com/open?id=1bXm_PJUfZrcFX1zZAPC50DOsm4-gKlmJ
 
-This script has developed because Pyglossary developer decided not to support conversion to .mtxt or .mdx; if the developer decided to support conversion to .mdx, this tool would not be developed, and I hope he does that.
+unzip, cd to it and run `python setup.py install` to install it to the venv
+# install dependencies
 
-<br />
-<br />
+- The most important dependencies:  
+```bash 
 
-### REQUIRMENTS: 
+pip install prompt_toolkit mdict-utils beautifulsoup4 python-lzo python-idzip
 
-1- Python 3.9 and up.
+```
 
-2- [Pyglossary](https://github.com/ilius/pyglossary) which originally come without octopus_mdict_source.py plugin if you install it using `pip install pyglossary`, because of the developer decided to stop developing this plugin.  
-SO: DOWNLOAD my modified ready version of pyglossary 4.6.1 with octopus_mdict_source.py plugin added to /pyglossary/plugins folder, and ui_cmd_interactive.py file modified a bit; from this Google Drive [LINK](https://drive.google.com/open?id=1bXm_PJUfZrcFX1zZAPC50DOsm4-gKlmJ). Decompress the downloaded zip file, and run: `python setup.py install` from inside the decompressed folder to install this modified version of pyglossay and it will work perfectly.
+If there is an error for lzo, install this lib on your system: `sudo apt install liblzo2-dev`
 
-N.B: As a reference; you can download "octopus_mdict_source.py" plugin from this [link](https://gist.github.com/ilius/88d11fa37a4a40cd0d7f6535120b0693).
+- Other important dependencies:
+```bash 
 
-3- The most important dependencies:  
-`pip3 install prompt_toolkit mdict-utils beautifulsoup4 python-lzo python-idzip`
+pip install lxml polib PyYAML beautifulsoup4 marisa-trie html5lib PyICU libzim
 
-4- Other important dependencies:  
-`pip3 install lxml polib PyYAML beautifulsoup4 marisa-trie html5lib PyICU libzim>=1.0` 
+``` 
 
-<br />
-<br />
+# generate
+Remember to active the venv first `source .venv/bin/activate`
+- Install the modified version of pyglossary, and dependencies.
+
+- Copy Stardict dictionary data files to the directory where `dict2mdx.py` is located and run `python3 dict2mdx.py`
+- Answer its questions:
+  - Input `.ifo` output `.mtxt`.
+  - Then convert to `.mtxt` then to `mdx`
+
+For example:
+
+```bash 
+(.venv) ➜  v2.0.0 python3 dict2mdx.py
+.script_history.txt not found. Ignoring on first run.
+All dependings are ready!!
+
+If your file is already .mtxt and/or sources folder and you want to convert directly to MDX and/or MDD press (y)!! OR press any other key if not! 
+Your conversion will continue
+
+> Input file: 2025_webster.ifo
+> Output file: 2025_webster.mtxt
+> Select action (ENTER to convert):
+[INFO] Writing to OctopusMdictSource file '/home/p/pDEV/python-env/mdict-convert-pythonscript/v2.0.0/2025_webster.mtxt'
+Converting: %99.8 |██████████████████████████████████████████████████████████████████████████████████████████████████▊|[00:01<00:00,  1.06s/it]
+[INFO] Writing file '/home/p/pDEV/python-env/mdict-convert-pythonscript/v2.0.0/2025_webster.mtxt' done.
+[INFO] Running time of convert: 1.2 seconds
+
+If you want to repeat this conversion later, you can use this command:
+pyglossary 2025_webster.ifo 2025_webster.mtxt --read-format=Stardict --write-format=OctopusMdictSource
+> Press enter to exit, 'a' to convert again:
 
 
-### USAGE:
+Convert .mtxt to MDX? (y) or press any other key to exit? y
+Enter dict name again: 2025_webster.mtxt
+Scan "2025_webster.mtxt": 98976
 
-Navigate to the directory that contains this python script and copy the dictionary file to the same directory, and run this command:
-`python dict2mdx.py`
-<br />
-<br />
+Pack to "2025_webster.mdx"
+100%|████████████████████████████████████████████████████████████████████████████████████████████████| 98976/98976 [00:01<00:00, 89839.37rec/s]
+                     --- Elapsed time: 2.019151 seconds ---                     
+Scan "2025_webster.mtxt_res": 12
 
-### Finally:
-If requirements are met and all dependencies are ready, your conversion will run smoothly and your .mdx dictionary will be ready, to be used by Multi-dictionaries viewers which support .mdx files (ex. DictTango, Bluedict, Mdict, GoldenDict PC, etc).  
+Pack to "2025_webster.mdd"
+100%|████████████████████████████████████████████████████████████████████████████████████████████████████████| 12/12 [00:00<00:00, 123.02rec/s]
+                     --- Elapsed time: 0.105965 seconds ---                     
+Sources is also converted to MDD
 
-Thanks to "4pda.to" guy "cсpizz" who made the primary version of this automatic script who inspired me to update the script, make a similar python script and make it more useful. [LINK to the original script](https://gist.github.com/glowinthedark/e393730e8477bb64f86fc99ec21d6303).
+All done!
 
-Thanks to the owners of Pyglossary and mdict-utils.
+```
